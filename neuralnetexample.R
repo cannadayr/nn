@@ -17,8 +17,7 @@ source("plot_nn.R")
 #TODO define better behavior for other OS's
 if (.Platform$OS.type == "unix") {
     options(device = "x11")
-}
-else {
+} else {
     options(device = "pdf")
 }
 
