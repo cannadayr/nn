@@ -5,6 +5,23 @@ library(ggplot2) # So we can make graphcs
 library(pROC) # Includes function to calculate the AUC metric
 library(neuralnet)
 
+# the neuralnet library creates a new graphics device for each plot iteration without closing the previous device
+# on linux for example, there is a maximum number of open devices
+# import a "plot_nn" library that overloads the default plot
+# and then modify it to get the correct behavior
+# see the following thread:
+# https://stackoverflow.com/questions/11866740/having-problems-saving-a-neural-net-plot-using-neuralnet-package-r/11881985#11881985
+source("plot_nn.R")
+
+# on unix, set the default device to X11
+#TODO define better behavior for other OS's
+if (.Platform$OS.type == "unix") {
+    options(device = "x11")
+}
+else {
+    options(device = "pdf")
+}
+
 # Read documentation for a neuralnet here:
 # https://datascienceplus.com/fitting-neural-network-in-r/
 # https://en.wikipedia.org/wiki/Artificial_neural_network
@@ -65,7 +82,9 @@ print(summary(nn))
 # NOTE!!! On my computer, I think there's a bug where this went on forever, so you might have to press the red "STOP" bottom
 # In the top-left of the console. 
 # You've been warned!
-plot(nn)
+
+# this is using the plot.nn fn from "plot_nn.R"
+plot.nn(nn)
 
 ##### Assess model performance
 # Created predicted results for the test dataset
